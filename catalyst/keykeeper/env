@@ -1,0 +1,4 @@
+export MAKEOPTS="-j5"
+export LC_CTYPE=en_US.UTF-8
+export PYTHON_TARGETS="python2_7"
+export USE_PYTHON="2.7"
