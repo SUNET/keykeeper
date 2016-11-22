@@ -17,10 +17,23 @@ emerge dev-vcs/git && ( cd /usr/src && git clone https://github.com/SUNET/memcar
 
 # HW random number generator support
 emerge sys-apps/rng-tools
+emerge sys-apps/usbutils
 rc-update add rngd default
 cp $DIR/extras/rngd.conf /etc/conf.d/rngd
+cp $DIR/extras/99_ldattach_rngd.rules /etc/udev/rules.d
 
 # Luna SA client
 emerge rpm
 rpm -i --nodeps $DIR/extras/luna/*.rpm
-~                                                                                                                                 
+
+# configure Luna p2p network
+(cd /etc/init.d ; test -h net.enp2s0 || ln -s net.lo net.enp2s0)
+touch /etc/conf.d/net
+grep -q config_enp2s0 /etc/conf.d/net || echo "config_enp2s0=\"10.0.0.2/255.255.255.0\"" >> /etc/conf.d/net
+
+# python & dependencies (secretsharing)
+emerge dev-python/pip # pulls in python
+pip install secretsharing
+
+# openssl
+emerge openssl
