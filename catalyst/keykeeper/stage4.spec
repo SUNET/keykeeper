@@ -3,8 +3,8 @@ version_stamp: keykeeper.201611
 target: stage4
 profile: hardened/linux/amd64/no-multilib
 rel_type: hardened
-snapshot: /usr
-source_subpath: hardened/stage3-amd64-hardened+nomultilib-FIXME
+snapshot: 20161128
+source_subpath: hardened/stage3-amd64-hardened+nomultilib-20161020
 portage_confdir: /etc/catalyst/keykeeper/portage
 cflags: -O2 -pipe
 
