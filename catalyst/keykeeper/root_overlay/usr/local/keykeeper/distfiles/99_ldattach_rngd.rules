@@ -1,9 +1,1 @@
-ACTION!="add", GOTO="rng_rules_end"
-SUBSYSTEM!="usb", GOTO="rng_rules_end"
-ENV{DEVTYPE}!="usb_device", GOTO="rng_rules_end"
-
-# set USB power management to auto.
-ENV{ID_USB_INTERFACES}=="0403:6001", RUN+="ldattach -8 -n -1 -s 921600 tty /dev/ttyUSB0"
-
-# All done
-LABEL="rng_rules_end"
+KERNEL=="ttyUSB*", RUN+="ldattach -8 -n -1 -s 921600 tty /dev/ttyUSB%n"
