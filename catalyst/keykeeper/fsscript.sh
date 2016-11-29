@@ -1,3 +1,6 @@
+set -o errexit
+set -o nounset
+
 cat << EOF > /etc/conf.d/net
 config_enp1s0=("dhcp")
 config_enp2s0="10.0.0.2/24"
