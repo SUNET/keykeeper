@@ -47,7 +47,8 @@ cd /mnt/gentoo
 tar xj -f /mnt2/stage4-amd64-keykeeper.*.tar.bz2 --xattrs
 cp -a /mnt2/boot .
 mount -t proc proc proc; mount -R /dev dev; mount -R /sys sys
-chroot .; . /etc/profile; export PS1="(chroot) $PS1"
+chroot .
+. /etc/profile; export PS1="(chroot) $PS1"
 grub-install /dev/sda
 grub-mkconfig -o /boot/grub/grub.cfg
 passwd -d root
