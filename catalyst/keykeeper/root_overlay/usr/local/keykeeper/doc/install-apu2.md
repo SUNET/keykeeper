@@ -4,9 +4,15 @@ dd an install-amd64-minimal-<date>.iso onto a USB stick, the
 boot stick.
 
 Copy a stage4 tarball from the build machine, as described in
-bootstrap.md, to a filesystem on another USB stick. In addition to
-that, copy the following files from /boot on the build machine to the
-stick: System.map-*-hardened initramfs-*-hardened kernel-*-hardened.
+bootstrap.md, to a filesystem on another USB stick.
+
+Temporarily, until we've packaged the kernel a bit nicer: In addition
+to that, copy the following files from FIXME to the stick:
+
+    /boot/System.map-*4.7.10-hardened
+    /boot/initramfs-*4.7.10-hardened
+    /boot/kernel-*4.7.10-hardened
+    /lib/modules/4.7.10-hardened
 
 Connect the serial port to a terminal (program) and boot from the boot
 stick by pressing F10, selecting the boot stick and entering
@@ -46,6 +52,7 @@ date CURRENTDATEANDTIMEINUTC
 cd /mnt/gentoo
 tar xj -f /mnt2/stage4-amd64-keykeeper.*.tar.bz2 --xattrs
 cp -a /mnt2/boot .
+cp -a /mnt2/lib/modules/* /lib/modules/
 mount -t proc proc proc; mount -R /dev dev; mount -R /sys sys
 chroot .
 . /etc/profile; export PS1="(chroot) $PS1"
