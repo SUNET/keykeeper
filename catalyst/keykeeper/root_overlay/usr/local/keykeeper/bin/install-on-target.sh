@@ -7,7 +7,7 @@ DIR=/usr/local/keykeeper
 
 # ACS card reader driver.
 (
-    tar -C /usr/src -xz -f $DIR/distfiles/acsccid-1.1.3.tar.gz
+    tar -C /usr/src -xf $DIR/distfiles/acsccid-1.1.3.tar.gz
     cd /usr/src/acsccid-1.1.3
     ./bootstrap
     ./configure
@@ -19,7 +19,7 @@ DIR=/usr/local/keykeeper
 
 # pyscard.
 (
-    tar -C /usr/src -xz -f $DIR/distfiles/pyscard-1.9.4.tar.xz
+    tar -C /usr/src -xf $DIR/distfiles/pyscard-1.9.4.tar.xz
     cd /usr/src/pyscard-1.9.4
     python setup.py install
 )
