@@ -18,6 +18,37 @@ cp $DIR/extras/99_ldattach_rngd.rules /etc/udev/rules.d
 
 # Luna SA client
 rpm -i --nodeps $DIR/extras/luna/*.rpm
+cat<<EOF>/etc/Chrystoki.conf
+Chrystoki2 = {
+   LibUNIX = /usr/lib/libCryptoki2.so;
+   LibUNIX64 = /usr/lib/libCryptoki2_64.so;
+}
+
+Luna = {
+  DefaultTimeOut = 500000;
+  PEDTimeout1 = 100000;
+  PEDTimeout2 = 200000;
+  PEDTimeout3 = 10000;
+  KeypairGenTimeOut = 2700000;
+  CloningCommandTimeOut = 300000;
+  CommandTimeOutPedSet = 720000;
+}
+
+LunaSA Client = {
+   ReceiveTimeout = 20000;
+   SSLConfigFile = /usr/safenet/lunaclient/bin/openssl.cnf;
+   ClientPrivKeyFile = /usr/safenet/lunaclient/cert/client/ClientKey.pem;
+   ClientCertFile = /usr/safenet/lunaclient/cert/client/Client.pem;
+}
+
+CardReader = {
+  RemoteCommand = 1;
+}
+
+Misc = {
+  PE1746Enabled = 0;
+}
+EOF
 
 # configure Luna p2p network
 (cd /etc/init.d ; test -h net.enp2s0 || ln -s net.lo net.enp2s0)
