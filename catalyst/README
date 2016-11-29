@@ -1,0 +1,22 @@
+# How to build a stage4 tarball for installation of Hardened Gentoo.
+
+# Place a verified stage3 tarball in the "seed directory":
+#   $storedir/builds/$source_subpath
+# Example for keykeeper:
+export SEED=/var/tmp/catalyst/builds/hardened
+mkdir -p $SEED
+cp stage3-amd64-hardened+nomultilib-20161124 $SEED/
+
+# Make a snapshot of /usr/portage.
+# Example:
+catalyst --snapshot 20161128
+
+# Relax some hardening settings messing with the build process.
+sysctl -w kernel.grsecurity.chroot_deny_chmod=0
+
+# Build the stage4 tarball.
+# Example for keykeeper:
+cd keykeeper && ./mkstage4.sh
+
+# Restore the hardening.
+sysctl -w kernel.grsecurity.chroot_deny_chmod=1
