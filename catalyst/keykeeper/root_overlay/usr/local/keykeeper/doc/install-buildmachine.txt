@@ -2,16 +2,16 @@
 # two logical volumes -- / and /boot. No unverified bits were executed
 # or installed during this installation process.
 
-# Get boot media and a stage tar ball from
+# Get boot media and a stage3 tar ball from
 #   https://gentoo.ussg.indiana.edu/
 # and verify them properly.
-# - dd admincd-amd64-20161020.iso onto a USB stick, the boot stick
-# - copy stage3-amd64-hardened+nomultilib-20161020.tar.bz2 to another USB stick
+# - dd install-amd64-minimal-<date>.iso onto a USB stick, the boot stick
+# - copy stage3-amd64-hardened+nomultilib-<date>.tar.bz2 to another USB stick
 
 # Get PGP keys from
 #   https://dev.gentoo.org/~dolsen/releases/keyrings/
 # and verify them properly.
-# - copy gentoo-keys-201607021514.tar.xz too to that second USB stick
+# - copy gentoo-keys-<date>.tar.xz too to that second USB stick
 
 # Boot from the boot stick, mount the second USB stick on /u2.
 
@@ -26,10 +26,11 @@ lvcreate --name boot --size 128M vg; lvcreate --name rootfs --extents 100%FREE v
 mkfs.ext2 /dev/mapper/vg-boot; mkfs.ext4 /dev/mapper/vg-rootfs
 mount /dev/mapper/vg-rootfs /mnt/gentoo
 mkdir /mnt/gentoo/boot; mount /dev/mapper/vg-boot /mnt/gentoo/boot
+date CURRENTDATEANDTIMEINUTC
 cd /mnt/gentoo; tar xjf /u2/stage3*.tar.bz2 --xattrs
 cp /usr/bin/gpg usr/bin/; cp -P /usr/lib/libassuan* usr/lib/
 mkdir -p var/lib/gentoo/gkeys/keyrings
-tar x -C var/lib/gentoo/gkeys/keyrings -f /u2/gentoo-keys-201607021514.tar.xz
+tar x -C var/lib/gentoo/gkeys/keyrings -f /u2/gentoo-keys-*.tar.xz
 chown 0:0 var/lib/gentoo/gkeys/keyrings/gentoo/release
 chmod 700 var/lib/gentoo/gkeys/keyrings/gentoo/release
 cat >> etc/portage/make.conf << EOF
