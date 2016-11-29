@@ -1,5 +1,8 @@
 #!/bin/sh
 
+set -o errexit
+set -o nounset
+
 export PATH=/usr/safenet/lunaclient/bin:$PATH
 
 ip = $1
