@@ -14,7 +14,7 @@ cp $DIR/distfiles/rngd.conf /etc/conf.d/rngd
 cp $DIR/distfiles/99_ldattach_rngd.rules /etc/udev/rules.d
 
 # Luna SA client
-rpm -i --nodeps $DIR/distfiles/luna/*.rpm
+rpm -i --nodeps $DIR/distfiles/luna/*.rpm || true
 cat<<EOF>/etc/Chrystoki.conf
 Chrystoki2 = {
    LibUNIX = /usr/lib/libCryptoki2.so;
