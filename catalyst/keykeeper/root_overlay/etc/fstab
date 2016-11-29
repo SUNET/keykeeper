@@ -1,0 +1,2 @@
+/dev/sda2       /boot   ext2    noatime 0 2
+/dev/sda3       /       ext4    errors=remount-ro,noatime 0 1
