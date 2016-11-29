@@ -25,5 +25,4 @@ touch /etc/conf.d/net
 grep -q config_enp2s0 /etc/conf.d/net || echo "config_enp2s0=\"10.0.0.2/255.255.255.0\"" >> /etc/conf.d/net
 
 # python & dependencies
-emerge dev-python/pip # pulls in python
 pip install extras/wheels/*.whl
