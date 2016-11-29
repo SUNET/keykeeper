@@ -1,0 +1,64 @@
+# Installing Hardened Gentoo on one encrypted LVM partition containing
+# two logical volumes -- / and /boot. No unverified bits were executed
+# or installed during this installation process.
+
+# Get boot media and a stage tar ball from
+#   https://gentoo.ussg.indiana.edu/
+# and verify them properly.
+# - dd admincd-amd64-20161020.iso onto a USB stick, the boot stick
+# - copy stage3-amd64-hardened+nomultilib-20161020.tar.bz2 to another USB stick
+
+# Get PGP keys from
+#   https://dev.gentoo.org/~dolsen/releases/keyrings/
+# and verify them properly.
+# - copy gentoo-keys-201607021514.tar.xz too to that second USB stick
+
+# Boot from the boot stick, mount the second USB stick on /u2.
+
+parted -a optimal /dev/sda
+# unit mib
+# mkpart primary 1 3; name 1 grub; set 1 bios_grub on
+# mkpart primary 3 -1; name 2 lvm
+cryptsetup luksFormat /dev/sda2
+cryptsetup luksOpen /dev/sda2 ssd
+pvcreate /dev/mapper/ssd; vgcreate vg /dev/mapper/ssd
+lvcreate --name boot --size 128M vg; lvcreate --name rootfs --extents 100%FREE vg
+mkfs.ext2 /dev/mapper/vg-boot; mkfs.ext4 /dev/mapper/vg-rootfs
+mount /dev/mapper/vg-rootfs /mnt/gentoo
+mkdir /mnt/gentoo/boot; mount /dev/mapper/vg-boot /mnt/gentoo/boot
+cd /mnt/gentoo; tar xjf /u2/stage3*.tar.bz2 --xattrs
+cp /usr/bin/gpg usr/bin/; cp -P /usr/lib/libassuan* usr/lib/
+mkdir -p var/lib/gentoo/gkeys/keyrings
+tar x -C var/lib/gentoo/gkeys/keyrings -f /u2/gentoo-keys-201607021514.tar.xz
+chown 0:0 var/lib/gentoo/gkeys/keyrings/gentoo/release
+chmod 700 var/lib/gentoo/gkeys/keyrings/gentoo/release
+cat >> etc/portage/make.conf << EOF
+FEATURES="webrsync-gpg"
+PORTAGE_GPG_DIR="/var/lib/gentoo/gkeys/keyrings/gentoo/release"
+EOF
+echo 'MAKEOPTS="-j 5"' >> /mnt/gentoo/etc/portage/make.conf
+mount -t proc proc proc; mount -R /dev dev; mount -R /sys sys
+cp /etc/resolv.conf etc/
+chroot .
+
+. /etc/profile; export PS1="(chroot) $PS1"
+emerge-webrsync
+$EDITOR /etc/portage/make.conf  # add to USE: cryptsetup
+emerge -av sys-kernel/genkernel sys-kernel/hardened-sources
+genkernel --menuconfig --luks --lvm --install all
+echo "sys-boot/grub:2 device-mapper" >> /etc/portage/package.use/grub:2
+emerge -av sys-boot/grub:2
+cat >> /etc/default/grub << EOF
+GRUB_CMDLINE_LINUX_DEFAULT="crypt_root=/dev/sda2 dolvm"
+GRUB_ENABLE_CRYPTODISK=y
+EOF
+grub-install /dev/sda
+grub-mkconfig -o /boot/grub/grub.cfg
+$EDITOR /etc/fstab
+passwd
+exit
+umount -R boot proc sys dev
+cd ..; umount gentoo
+dmsetup remove vg-rootfs; dmsetup remove vg-boot
+cryptsetup luksClose ssd
+shutdown -r now
