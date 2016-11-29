@@ -12,9 +12,6 @@ cp src/92_pcscd_acsccid.rules /etc/udev/rules.d
 cp $DIR/extras/Info.plist /usr/lib64/readers/usb/ifd-acsccid.bundle/Contents/Info.plist 
 )
 
-# SUNET memcard-tools
-emerge dev-vcs/git && ( cd /usr/src && git clone https://github.com/SUNET/memcard-tools && cd memcard-tools && make && make install )
-
 # HW random number generator support
 emerge sys-apps/rng-tools
 emerge sys-apps/usbutils
@@ -33,7 +30,7 @@ grep -q config_enp2s0 /etc/conf.d/net || echo "config_enp2s0=\"10.0.0.2/255.255.
 
 # python & dependencies (secretsharing)
 emerge dev-python/pip # pulls in python
-pip install secretsharing
+pip install extras/wheels/*.whl
 
 # openssl
 emerge openssl
