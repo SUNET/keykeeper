@@ -1,15 +1,12 @@
 #!/bin/sh
 
+set -o errexit
+set -o nounset
+
 DIR=/usr/local/keykeeper
 
-# PCSC-lite && ACS card reader driver
+# Enable PCSC-lite
 rc-update add pcscd default 
-(
-tar -C /usr/src -xvz -f $DIR/distfiles/acsccid-1.1.3.tar.gz 
-cd /usr/src/acsccid-1.1.3 && ./bootstrap && ./configure && make && make install 
-cp src/92_pcscd_acsccid.rules /etc/udev/rules.d 
-cp $DIR/distfiles/Info.plist /usr/lib64/readers/usb/ifd-acsccid.bundle/Contents/Info.plist 
-)
 
 # HW random number generator support
 rc-update add rngd default
@@ -17,7 +14,7 @@ cp $DIR/distfiles/rngd.conf /etc/conf.d/rngd
 cp $DIR/distfiles/99_ldattach_rngd.rules /etc/udev/rules.d
 
 # Luna SA client
-rpm -i --nodeps $DIR/distfiles/luna/*.rpm
+rpm -i --nodeps $DIR/distfiles/luna/*.rpm || true
 cat<<EOF>/etc/Chrystoki.conf
 Chrystoki2 = {
    LibUNIX = /usr/lib/libCryptoki2.so;
@@ -50,5 +47,6 @@ Misc = {
 }
 EOF
 
-# python & dependencies
-pip install $DIR/distfiles/wheels/*.whl
+# Secret sharing
+pip install $DIR/distfiles/wheels/pycardshare-*.whl
+pip install $DIR/distfiles/wheels/secretsharing-*.whl
