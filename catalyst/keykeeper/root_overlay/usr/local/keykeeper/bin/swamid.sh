@@ -82,19 +82,19 @@ case $1 in
 		subject=${5:-$def_subject}
 		days=${6:-$def_days}
 
-		swamid_new
-		swamid_use
+		swamid_new || exit 1
+		swamid_use || exit 1
 		;;
 
 	use)
 		name=${2:-$def_name}
-		swamid_use
+		swamid_use || exit 1
 		;;
 	info)
-		swamid_info
+		swamid_info || exit 1
 		;;
 	dup)
-		swamid_dup
+		swamid_dup || exit 1
 		;;
 	--help|-h)
 		help
