@@ -1,1 +1,1 @@
-sys-fs/cryptsetup udev
+sys-fs/cryptsetup udev -openssl

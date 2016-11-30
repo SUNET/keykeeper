@@ -13,6 +13,7 @@ catalyst --snapshot 20161128
 
 # Relax some hardening settings messing with the build process.
 sysctl -w kernel.grsecurity.chroot_deny_chmod=0
+sysctl -w kernel.grsecurity.chroot_deny_mknod=0
 
 # Build the stage4 tarball.
 # Example for keykeeper:
@@ -20,3 +21,4 @@ cd keykeeper && ./mkstage4.sh
 
 # Restore the hardening.
 sysctl -w kernel.grsecurity.chroot_deny_chmod=1
+sysctl -w kernel.grsecurity.chroot_deny_mknod=1
