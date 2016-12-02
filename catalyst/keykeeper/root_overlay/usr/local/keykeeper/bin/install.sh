@@ -50,3 +50,6 @@ EOF
 # Secret sharing
 pip install $DIR/distfiles/wheels/pycardshare-*.whl
 pip install $DIR/distfiles/wheels/secretsharing-*.whl
+
+# Symlink useful scripts to directory in PATH
+ln -s $DIR/bin/swamid.sh /usr/local/bin/swamid
