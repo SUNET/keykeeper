@@ -16,6 +16,7 @@ help()
 	echo "  use [name:$def_name]"
 	echo "  backup [device:$def_device] [name:$def_name]"
 	echo "  export [device:$def_device] [name:$def_name]"
+	echo "  verify"
 	echo "  card-info"
 	echo "  card-dup"
 	echo "  ent"
@@ -125,6 +126,20 @@ swamid_ent()
 	set +x
 }
 
+swamid_verify()
+{
+	echo "#"
+	echo "# Verify that CERT and KEY matches"
+	echo "#"
+
+	[ -n "$CERT" ] || { echo "\$CERT not set, run swamid use" ; exit 1 ; }
+	[ -n "$KEY" ] || { echo "\$KEY not set, run swamid use" ; exit 1 ; }
+	set -x
+	openssl x509 -noout -modulus -in $CERT | openssl sha256
+	openssl rsa -noout -modulus -in $KEY | openssl sha256 
+	set +x
+}
+
 [ $# = 0 ] && help
 if [ $1 = "-d" ] ; then
 	CARD=console
@@ -166,6 +181,9 @@ case $1 in
 		;;
 	ent)
 		swamid_ent || exit 1
+		;;
+	verify)
+		swamid_verify || exit 1
 		;;
 	--help|-h)
 		help
