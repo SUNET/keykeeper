@@ -1,5 +1,5 @@
 subarch: amd64
-version_stamp: keykeeper.201611
+version_stamp: keykeeper.201612
 target: stage4
 profile: hardened/linux/amd64/no-multilib
 rel_type: hardened
