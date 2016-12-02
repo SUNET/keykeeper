@@ -19,7 +19,7 @@ DIR=/usr/local/keykeeper
 
 # pyscard.
 (
-    tar -C /usr/src -xf $DIR/distfiles/pyscard-1.9.4.tar.xz
-    cd /usr/src/pyscard-1.9.4
+    tar -C /usr/src -xf $DIR/distfiles/pyscard-release-1.9.4.tar.gz
+    cd /usr/src/pyscard-release-1.9.4
     python setup.py install
 )
