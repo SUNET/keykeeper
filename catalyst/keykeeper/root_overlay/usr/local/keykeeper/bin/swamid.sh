@@ -29,7 +29,7 @@ swamid_new()
 	echo "# Generate certificate and save secret to cards"
 	echo "#"
 
-	keyshare new "$name" "$days" "$subject" "$required_parts" "$n_parts"
+	keyshare new "$name" "$days" "$subject" "$required_parts" "$n_parts" || exit 1
 
 	echo "#"
 	echo "# Certification information"
