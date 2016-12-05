@@ -18,4 +18,3 @@ boot/kernel: keykeeper
 stage4/gk_mainargs: --lvm --luks
 boot/kernel/keykeeper/sources: hardened-sources
 boot/kernel/keykeeper/config: /etc/catalyst/keykeeper/linux-config-4.7.10-hardened
-#boot/kernel/keykeeper/extraversion: keykeeper
