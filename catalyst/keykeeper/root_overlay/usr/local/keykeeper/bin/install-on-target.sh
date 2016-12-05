@@ -21,5 +21,5 @@ DIR=/usr/local/keykeeper
 (
     tar -C /usr/src -xf $DIR/distfiles/pyscard-release-1.9.4.tar.gz
     cd /usr/src/pyscard-release-1.9.4
-    python setup.py install
+    python2 setup.py install
 )
