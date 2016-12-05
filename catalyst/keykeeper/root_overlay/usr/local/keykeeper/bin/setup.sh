@@ -3,7 +3,7 @@
 set -o errexit
 set -o nounset
 
-export PATH=/usr/safenet/lunaclient/bin:$PATH
+export PATH=$PATH:/usr/safenet/lunaclient/bin
 
 ip = $1
 
