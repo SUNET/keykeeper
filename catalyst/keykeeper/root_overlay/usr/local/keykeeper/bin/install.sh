@@ -47,6 +47,11 @@ Misc = {
 }
 EOF
 
+# add HSM server public keys
+export PATH=/usr/safenet/lunaclient/bin:$PATH
+vtl addServer -n se-tug-hsm1 $DIR/distfiles/se-tug-hsm1.sunet.se.crt
+vtl addServer -n se-fre-hsm1 $DIR/distfiles/se-fre-hsm1.sunet.se.crt
+
 # Secret sharing
 pip install $DIR/distfiles/wheels/pycardshare-*.whl
 pip install $DIR/distfiles/wheels/secretsharing-*.whl
