@@ -1,1 +1,1 @@
-KERNEL=="ttyUSB*", RUN+="ldattach -8 -n -1 -s 921600 tty /dev/ttyUSB%n"
+KERNEL=="ttyUSB*", RUN+="/usr/sbin/ldattach -8 -n -1 -s 921600 tty /dev/ttyUSB%n"

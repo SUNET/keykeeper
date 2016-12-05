@@ -121,6 +121,7 @@ swamid_ent()
 	echo "#"
 
 	set -x
+	service rngd restart
 	ps auxww | grep '[r]ngd'
 	dd if=/dev/urandom count=10 bs=1M | ent
 	set +x
