@@ -5,16 +5,13 @@ set -o nounset
 
 DIR=/usr/local/keykeeper
 
-# Enable PCSC-lite
-rc-update add pcscd default 
-
 # HW random number generator support
 rc-update add rngd default
 cp $DIR/distfiles/rngd.conf /etc/conf.d/rngd
-cp $DIR/distfiles/99_ldattach_rngd.rules /etc/udev/rules.d
+cp $DIR/distfiles/99_ldattach_rngd.rules /etc/udev/rules.d/
 
 # Luna SA client
-rpm -i --nodeps $DIR/distfiles/luna/*.rpm || true
+rpm -i --nodeps $DIR/distfiles/luna72/*.rpm || true
 cat<<EOF>/etc/Chrystoki.conf
 Chrystoki2 = {
    LibUNIX = /usr/lib/libCryptoki2.so;
@@ -32,10 +29,12 @@ Luna = {
 }
 
 LunaSA Client = {
+   NetClient = 1;
    ReceiveTimeout = 20000;
    SSLConfigFile = /usr/safenet/lunaclient/bin/openssl.cnf;
-   ClientPrivKeyFile = /usr/safenet/lunaclient/cert/client/ClientKey.pem;
-   ClientCertFile = /usr/safenet/lunaclient/cert/client/Client.pem;
+   ClientPrivKeyFile = /usr/safenet/lunaclient/cert/client/10.0.0.1Key.pem;
+   ClientCertFile = /usr/safenet/lunaclient/cert/client/10.0.0.1.pem;
+   ServerCAFile = /usr/safenet/lunaclient/cert/server/CAFile.pem;
 }
 
 CardReader = {
@@ -44,17 +43,11 @@ CardReader = {
 
 Misc = {
   PE1746Enabled = 0;
+  ToolsDir = /usr/safenet/lunaclient/bin;
 }
 EOF
 
-# add HSM server public keys
+# Add HSM server public keys and configuration.
+# WARNING: Executing binary blobs on build machine.
 export PATH=/usr/safenet/lunaclient/bin:$PATH
-vtl addServer -n se-tug-hsm1 $DIR/distfiles/se-tug-hsm1.sunet.se.crt
-vtl addServer -n se-fre-hsm1 $DIR/distfiles/se-fre-hsm1.sunet.se.crt
-
-# Secret sharing
-pip2 install $DIR/distfiles/wheels/pycardshare-*.whl
-pip2 install $DIR/distfiles/wheels/secretsharing-*.whl
-
-# Symlink useful scripts to directory in PATH
-ln -s $DIR/bin/swamid.sh /usr/local/bin/swamid
+vtl addServer -n 10.0.0.1 -c $DIR/distfiles/tug-hsm2.sunet.se.pem

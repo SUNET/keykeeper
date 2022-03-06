@@ -1,0 +1,83 @@
+0. Prepare two USB sticks
+
+ One with the gentoo installer.
+ Another one with an ext4 filesystem with the keykeeper stage4 tar
+ ball.
+
+1. Boot the APU2 from a USB stick with the gentoo installer on it
+
+ Might not need the configuration step: If the USB stick is listed as
+ an option to boot from, go straight to the last step.
+
+ laptop$ screen /dev/ttyUSB0 115200
+ F10 # boot menu
+ 2   # configure
+ a   # boot from USB
+ s   # save and exit
+ <reboot>
+ F10
+ 1   # select USB
+
+
+ At the SYSLinux (?) prompt:
+
+ boot: gentoo console=ttyS0,115200
+
+ After kernel booting, this should be printed:
+
+ livecd ~ # 
+
+Set date
+
+ date -s 021513002022
+
+2. Prepare the SD card ("hard disk") by partitioning it and creating
+   one filesystem (ext4) for / and one (ext2) for /boot
+
+ export DEV=/dev/sdX
+ parted $DEV mklabel gpt
+ parted $DEV disk_set pmbr on
+ parted $DEV unit mib mkpart primary 1 3
+ parted $DEV name 1 grub
+ parted $DEV set 1 bios_grub on
+ parted $DEV unit mib mkpart primary 3 259
+ parted $DEV name 2 boot
+ parted $DEV -- unit mib mkpart primary 259 -1
+ parted $DEV name 3 rootfs
+ mkfs.ext2 ${DEV}2
+ mkfs.ext4 ${DEV}3
+
+3. Unpack the keykeeper tar ball in the newly created filesystems and
+   chroot into the root filesystem
+
+ mkdir /mnt2; mount /dev/sdY1 /mnt2
+ mount ${DEV}3 /mnt/gentoo
+ cd /mnt/gentoo
+ mkdir boot; mount ${DEV}2 boot
+ tar xpf /mnt2/stage4-amd64-*.tar.bz2 --xattrs-include='*.*' --numeric-owner
+ chown root:root .
+
+ mount -t proc proc proc
+ mount -R /sys sys; mount --make-rslave sys
+ mount -R /dev dev; mount --make-rslave dev
+ mount -R /run run; mount --make-rslave run
+ chroot .
+
+ . /etc/profile; export PS1="(chroot) $PS1"
+
+4. Set or clear root password
+
+ passwd -d root
+
+5. Install GRUB
+
+ mkdir /boot/grub
+ grub-mkconfig -o /boot/grub/grub.cfg
+ grub-install /dev/sda
+
+6. Unmount filesystems and reboot into the new kernel
+
+ exit
+ cd ..
+ mount | awk '/\/mnt\/gentoo/{print $3}' | sort -r | while read -r mp; do umount $mp; done
+ reboot

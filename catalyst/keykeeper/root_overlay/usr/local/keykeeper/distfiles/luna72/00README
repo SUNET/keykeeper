@@ -1,0 +1,14 @@
+Based on docker-luna-client/luna-client-7.2/deb.sh:
+
+ckdemo_7.2.0-221_amd64.deb
+cklog_7.2.0-221_amd64.deb
+cksample_7.2.0-221_amd64.deb
+configurator_7.2.0-221_amd64.deb
+libcryptoki_7.2.0-221_amd64.deb
+libshim_7.2.0-221_amd64.deb
+lunacm_7.2.0-221_amd64.deb
+lunacmu_7.2.0-221_amd64.deb
+lunadiag_7.2.0-221_amd64.deb
+multitoken_7.2.0-221_amd64.deb
+salogin_7.2.0-221_amd64.deb
+vtl_7.2.0-221_amd64.deb
